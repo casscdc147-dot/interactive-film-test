@@ -1,133 +1,337 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity Web Player | 美妆女王</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-  </head>
-  <body>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="theme-color" content="#140c0a">
+  <title>美妆女王 · 互动影游 v4</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23211512'/%3E%3Cpath d='M12 46L17 22L27 33L32 17L37 33L47 22L52 46Z' fill='%23eed2b5'/%3E%3C/svg%3E">
+  <link rel="preload" as="image" href="assets/poster.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+    <!-- 桌面端与超长全面屏静态香槟暖光氛围背景（零实时滤镜开销，保障视频解码满帧 1.0x） -->
+    <div class="ambient-backdrop" aria-hidden="true"></div>
+
+    <!-- 严格 9:16 响应式核心舞台（同时适配 1440×2560 海报与 720×1280 竖屏视频） -->
+    <main class="stage" id="stage" aria-label="美妆女王互动影游舞台">
+      <!-- 1. 视频与末帧冻结画布层 -->
+      <div class="media-layer" id="media-layer">
+        <canvas id="freeze-canvas" width="720" height="1280" aria-hidden="true"></canvas>
+
+        <video
+          id="video-slot-0"
+          class="video-slot"
+          muted
+          playsinline
+          webkit-playsinline
+          x5-playsinline="true"
+          x5-video-player-type="h5-page"
+          x5-video-orientation="portraint"
+          preload="none"
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        ></video>
+
+        <video
+          id="video-slot-1"
+          class="video-slot"
+          muted
+          playsinline
+          webkit-playsinline
+          x5-playsinline="true"
+          x5-video-player-type="h5-page"
+          x5-video-orientation="portraint"
+          preload="none"
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        ></video>
+
+        <video
+          id="video-slot-2"
+          class="video-slot"
+          muted
+          playsinline
+          webkit-playsinline
+          x5-playsinline="true"
+          x5-video-player-type="h5-page"
+          x5-video-orientation="portraint"
+          preload="none"
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        ></video>
+
+        <div class="stage-scrim" id="stage-scrim" aria-hidden="true"></div>
+      </div>
+
+      <!-- 2. 首页海报层（用户点击开始前严格静音，不触发任何音视频 play()） -->
+      <section class="cover-layer" id="cover-layer" aria-label="游戏首页">
+        <img
+          id="poster-img"
+          class="poster-img"
+          src="assets/poster.png"
+          alt="美妆女王 首页海报"
+          draggable="false"
+        >
+
+        <!-- 首段视频静默预缓冲状态徽标 -->
+        <div class="cover-status-pill" id="cover-status-pill" aria-live="polite">
+          <span class="status-dot" id="cover-status-dot"></span>
+          <span id="cover-status-text">EP.06 · 准备就绪</span>
+        </div>
+
+        <!-- 精确对齐海报原图「开始游戏」按钮（1440×2560 下 x=382, y=2262, w=676, h=136） -->
+        <button
+          id="btn-start-hotspot"
+          class="poster-start-hotspot"
+          type="button"
+          aria-label="开始游戏"
+        >
+          <span class="hotspot-ring" aria-hidden="true"></span>
+          <span class="sr-only">开始游戏</span>
+        </button>
+
+        <!-- 次级入口：仅在存在有效本地存档时显示于「开始游戏」下方安全区，绝不遮挡主按钮 -->
+        <div class="cover-secondary-bar" id="cover-secondary-bar">
+          <button id="btn-continue-game" class="cover-pill-btn hidden" type="button">
+            继续上次进度
+          </button>
+        </div>
+      </section>
+
+      <!-- 3. 局内顶部轻量控制栏 -->
+      <header class="hud-top hidden" id="hud-top">
+        <div class="clip-progress-track" aria-hidden="true">
+          <div class="clip-progress-fill" id="clip-progress-fill"></div>
+        </div>
+
+        <div class="hud-bar-inner">
+          <button
+            id="btn-node-indicator"
+            class="hud-node-pill"
+            type="button"
+            title="查看剧情分支图"
+          >
+            <span class="node-dot"></span>
+            <span id="hud-node-label">01 · 直播落幕</span>
+          </button>
+
+          <div class="hud-actions">
+            <button
+              id="btn-toggle-mute"
+              class="icon-btn"
+              type="button"
+              aria-label="切换静音"
+              title="静音 / 开启声音 (M)"
+            >
+              <svg id="icon-sound-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+              </svg>
+              <svg id="icon-sound-off" class="hidden" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <line x1="23" y1="9" x2="17" y2="15"></line>
+                <line x1="17" y1="9" x2="23" y2="15"></line>
+              </svg>
+            </button>
+
+            <button
+              id="btn-open-tree"
+              class="icon-btn"
+              type="button"
+              aria-label="剧情分支图"
+              title="剧情分支与回溯"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="6" cy="6" r="2.5"></circle>
+                <circle cx="18" cy="6" r="2.5"></circle>
+                <circle cx="12" cy="18" r="2.5"></circle>
+                <path d="M7.8 7.8L10.8 15.8"></path>
+                <path d="M16.2 7.8L13.2 15.8"></path>
+              </svg>
+            </button>
+
+            <button
+              id="btn-pause"
+              class="icon-btn"
+              type="button"
+              aria-label="暂停菜单"
+              title="暂停 / 设置 (Space / Esc)"
+            >
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="9" y1="6" x2="9" y2="18"></line>
+                <line x1="15" y1="6" x2="15" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 浏览器极端自动播放受限时的单击恢复声音横幅 -->
+        <button id="btn-unlock-audio" class="audio-rescue-pill hidden" type="button">
+          当前已被浏览器静音 · 点击开启原声
+        </button>
+      </header>
+
+      <!-- 4. 缓冲加载提示层（仅在弱网切换超 180ms 时显现） -->
+      <div class="loading-overlay hidden" id="loading-overlay" role="status" aria-live="polite">
+        <div class="spinner-ring" aria-hidden="true"></div>
+        <span class="loading-text" id="loading-text">正在加载片段…</span>
+      </div>
+
+      <!-- 5. 分支抉择层（位于下部安全区，保留末帧人物面部表情不遮挡） -->
+      <section class="choice-layer hidden" id="choice-layer" aria-label="剧情分支选择">
+        <div class="choice-panel">
+          <div class="choice-header">
+            <span class="choice-step-badge" id="choice-step-badge">抉择 1 / 4</span>
+            <div class="choice-mini-tools">
+              <button id="btn-choice-prev" class="mini-link-btn hidden" type="button" title="退回上一个选择点">
+                ↩ 上一抉择
+              </button>
+              <button id="btn-choice-replay" class="mini-link-btn" type="button" title="重新观看当前片段">
+                ↻ 重看本段
+              </button>
+            </div>
+          </div>
+
+          <p class="choice-prompt" id="choice-prompt">你的反应是……</p>
+
+          <div class="countdown-wrap" aria-label="选择倒计时">
+            <div class="countdown-track">
+              <div class="countdown-fill" id="countdown-fill"></div>
+            </div>
+            <div class="countdown-meta">
+              <span id="countdown-seconds">5.0s</span>
+              <span class="countdown-hint">超时默认选 A</span>
+            </div>
+          </div>
+
+          <div class="choice-buttons">
+            <button id="btn-option-a" class="choice-card choice-card-a" type="button" data-option="0">
+              <span class="choice-badge">A</span>
+              <span class="choice-copy">
+                <strong class="choice-title" id="option-a-title">选项 A</strong>
+                <small class="choice-sub" id="option-a-sub"></small>
+              </span>
+              <kbd class="choice-key-hint" aria-hidden="true">1</kbd>
+            </button>
+
+            <button id="btn-option-b" class="choice-card choice-card-b" type="button" data-option="1">
+              <span class="choice-badge">B</span>
+              <span class="choice-copy">
+                <strong class="choice-title" id="option-b-title">选项 B</strong>
+                <small class="choice-sub" id="option-b-sub"></small>
+              </span>
+              <kbd class="choice-key-hint" aria-hidden="true">2</kbd>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. 结局成就结算层（源自第6集分镜表 S09-12 官方成就与称号，置于下部安全区） -->
+      <section class="ending-layer hidden" id="ending-layer" aria-label="结局成就结算">
+        <div class="ending-card">
+          <div class="ending-kicker">EPISODE 06 · 结局达成</div>
+          <h2 class="ending-achievement" id="ending-achievement">达成成就：直播救场！职位晋升！</h2>
+          <div class="ending-title-row">
+            <span class="ending-title-label">获得称号</span>
+            <span class="ending-title-badge" id="ending-title">救场女王</span>
+          </div>
+          <p class="ending-subtitle" id="ending-subtitle"></p>
+
+          <div class="ending-route-box">
+            <div class="ending-route-header">
+              <span>本次抉择轨迹（点击可回溯重选）</span>
+              <span id="ending-collection-stat">分支解锁 4/8</span>
+            </div>
+            <div class="ending-route-chips" id="ending-route-chips"></div>
+          </div>
+
+          <div class="ending-actions">
+            <button id="btn-ending-back" class="btn-ui btn-secondary" type="button">
+              ↩ 返回上一选择点
+            </button>
+            <button id="btn-ending-restart" class="btn-ui btn-primary" type="button">
+              重新开始
+            </button>
+          </div>
+          <button id="btn-ending-home" class="btn-text-home" type="button">
+            返回首页海报
+          </button>
+        </div>
+      </section>
+
+      <!-- 7. 暂停与设置弹窗 -->
+      <div class="modal-backdrop hidden" id="pause-modal" role="dialog" aria-modal="true" aria-labelledby="pause-modal-title">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h3 id="pause-modal-title">游戏已暂停</h3>
+            <button id="btn-close-pause" class="modal-close-btn" type="button" aria-label="关闭暂停菜单">✕</button>
+          </div>
+
+          <div class="setting-row">
+            <label for="volume-slider">原声音量</label>
+            <div class="volume-control">
+              <input id="volume-slider" type="range" min="0" max="100" value="100">
+              <span id="volume-value">100%</span>
+            </div>
+          </div>
+
+          <div class="modal-stack">
+            <button id="btn-resume" class="btn-ui btn-primary" type="button">继续播放</button>
+            <button id="btn-replay-current" class="btn-ui btn-secondary" type="button">重播当前片段</button>
+            <button id="btn-pause-back" class="btn-ui btn-secondary" type="button">↩ 返回上一选择点</button>
+            <button id="btn-pause-tree" class="btn-ui btn-secondary" type="button">查看剧情分支图</button>
+            <button id="btn-fullscreen" class="btn-ui btn-secondary hidden" type="button">切换全屏显示</button>
+            <button id="btn-pause-home" class="btn-ui btn-ghost" type="button">返回首页海报</button>
+          </div>
         </div>
       </div>
-      <div id="unity-warning"> </div>
-      <div id="unity-footer">
-        <div id="unity-logo-title-footer"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">美妆女王</div>
+
+      <!-- 8. 剧情分支图与回溯跳转面板 -->
+      <div class="modal-backdrop hidden" id="tree-modal" role="dialog" aria-modal="true" aria-labelledby="tree-modal-title">
+        <div class="modal-card tree-modal-card">
+          <div class="modal-header">
+            <div>
+              <h3 id="tree-modal-title">剧情分支图</h3>
+              <p class="tree-subtitle" id="tree-progress-summary">点击已途经的选择节点可立即回溯重选</p>
+            </div>
+            <button id="btn-close-tree" class="modal-close-btn" type="button" aria-label="关闭剧情分支图">✕</button>
+          </div>
+
+          <div class="story-graph" id="story-graph"></div>
+        </div>
       </div>
-    </div>
-    <script>
-      var canvas = document.querySelector("#unity-canvas");
 
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        var warningBanner = document.querySelector("#unity-warning");
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
-      }
+      <!-- 9. 异常恢复提示弹窗 -->
+      <div class="modal-backdrop hidden" id="error-modal" role="alertdialog" aria-modal="true" aria-labelledby="error-modal-title">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h3 id="error-modal-title">视频加载遇到问题</h3>
+          </div>
+          <p class="error-message" id="error-message"></p>
+          <div class="modal-stack">
+            <button id="btn-error-retry" class="btn-ui btn-primary" type="button">重试当前片段</button>
+            <button id="btn-error-home" class="btn-ui btn-ghost" type="button">返回首页</button>
+          </div>
+        </div>
+      </div>
+    </main>
 
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/WebGL_v4.loader.js";
-      var config = {
-        arguments: [],
-        dataUrl: buildUrl + "/WebGL_v4.data",
-        frameworkUrl: buildUrl + "/WebGL_v4.framework.js",
-        codeUrl: buildUrl + "/WebGL_v4.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "InteractiveFilmPrototype",
-        productName: "美妆女王",
-        productVersion: "0.4.0",
-        showBanner: unityShowBanner,
-        // errorHandler: function(err, url, line) {
-        //    alert("error " + err + " occurred at line " + line);
-        //    // Return 'true' if you handled this error and don't want Unity
-        //    // to process it further, 'false' otherwise.
-        //    return true;
-        // },
-      };
+    <!-- 桌面端底部轻量快捷键提示（仅在宽屏电脑浏览器展示） -->
+    <aside class="desktop-shortcuts-hint" id="desktop-shortcuts-hint" aria-hidden="true">
+      <span><kbd>1</kbd> / <kbd>A</kbd> 选 A</span>
+      <span><kbd>2</kbd> / <kbd>B</kbd> 选 B</span>
+      <span><kbd>Space</kbd> 暂停</span>
+      <span><kbd>M</kbd> 静音</span>
+    </aside>
+  </div>
 
-      // By default, Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
-
-      // If you would like all file writes inside Unity Application.persistentDataPath
-      // directory to automatically persist so that the contents are remembered when
-      // the user revisits the site the next time, uncomment the following line:
-      // config.autoSyncPersistentDataPath = true;
-      // This autosyncing is currently not the default behavior to avoid regressing
-      // existing user projects that might rely on the earlier manual
-      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
-      // expected to change.
-
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-        document.querySelector("#unity-container").className = "unity-mobile";
-        canvas.className = "unity-mobile";
-
-        // To lower canvas resolution on mobile devices to gain some
-        // performance, uncomment the following line:
-        // config.devicePixelRatio = 1;
-
-
-      } else {
-        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-        canvas.style.width = "960px";
-        canvas.style.height = "600px";
-      }
-
-      document.querySelector("#unity-loading-bar").style.display = "block";
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
-              }).then((unityInstance) => {
-                document.querySelector("#unity-loading-bar").style.display = "none";
-                document.querySelector("#unity-fullscreen-button").onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };
-
-              }).catch((message) => {
-                alert(message);
-              });
-            };
-
-      document.body.appendChild(script);
-
-    </script>
-  </body>
+  <script src="js/story-data.js"></script>
+  <script src="js/app.js"></script>
+</body>
 </html>

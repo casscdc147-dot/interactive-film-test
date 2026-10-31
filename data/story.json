@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "revision": "beauty-queen-ep06-s09-web-v4",
+  "displayName": "美妆女王 · 第6集《后台晋升》网页互动版 v4",
+  "episodeBadge": "EP.06 · 后台化妆室",
+  "startNode": "01",
+  "menuVideo": "",
+  "choiceDurationSec": 5,
+  "poster": {
+    "src": "assets/poster.png",
+    "width": 1440,
+    "height": 2560,
+    "startHotspot": {
+      "x": 382,
+      "y": 2262,
+      "width": 676,
+      "height": 136
+    }
+  },
+  "nodes": [
+    {
+      "id": "01",
+      "title": "01 · 直播落幕",
+      "summary": "危机直播圆满收场，舒闫宇递水慰问",
+      "video": "videos/01-1.mp4",
+      "duration": 8.638,
+      "choiceIndex": 1,
+      "prompt": "舒闫宇递来矿泉水轻声慰问，你的反应是……",
+      "optionA": "真诚致谢，回应闫宇老师关切",
+      "optionASub": "接过水瓶礼貌道谢，倾听搭档肯定",
+      "targetA": "02a",
+      "optionB": "默契相视，等待后台直播战报",
+      "optionBSub": "与搭档温言收场，许星燃携数据冲入",
+      "targetB": "02b"
+    },
+    {
+      "id": "02a",
+      "title": "02A · 搭档认可",
+      "summary": "接水致谢，舒闫宇夸赞准备充分",
+      "video": "videos/02a-1.mp4",
+      "duration": 7.407,
+      "branchTag": "1A",
+      "next": "03"
+    },
+    {
+      "id": "02b",
+      "title": "02B · 数据爆表",
+      "summary": "默契搭档，许星燃冲入后台报喜",
+      "video": "videos/02b-1.mp4",
+      "duration": 10.17,
+      "branchTag": "1B",
+      "next": "03"
+    },
+    {
+      "id": "03",
+      "title": "03 · 总裁亲临",
+      "summary": "销量飙升惊喜未落，陆砚持文件步入化妆室",
+      "video": "videos/03-1.mp4",
+      "duration": 5.0,
+      "choiceIndex": 2,
+      "prompt": "陆总手持文件突然现身后台，此时你会……",
+      "optionA": "起身致意，谦逊归功团队配合",
+      "optionASub": "端正迎向陆总认可，展现职场风度",
+      "targetA": "04a",
+      "optionB": "屏息注视，直接听取人事安排",
+      "optionBSub": "目光落向调任文件，迎接正式任命",
+      "targetB": "04b"
+    },
+    {
+      "id": "04a",
+      "title": "04A · 当面嘉许",
+      "summary": "陆总肯定直播表现，夏橙橙谦逊致谢",
+      "video": "videos/04a-1.mp4",
+      "duration": 8.405,
+      "branchTag": "2A",
+      "next": "05"
+    },
+    {
+      "id": "04b",
+      "title": "04B · 破格调任",
+      "summary": "陆总递出人事调任通知，宣布试色组组长任命",
+      "video": "videos/04b-1.mp4",
+      "duration": 7.4,
+      "branchTag": "2B",
+      "next": "05"
+    },
+    {
+      "id": "05",
+      "title": "05 · 一纸任命",
+      "summary": "手握《人事调任通知》，直面试色组组长新身份",
+      "video": "videos/05-1.mp4",
+      "duration": 4.644,
+      "choiceIndex": 3,
+      "prompt": "手握「试色组组长」调任通知，你心头涌起……",
+      "optionA": "按捺狂喜：这幸福来得也太快了！",
+      "optionASub": "内心雀跃不已，惊喜于首日破格晋升",
+      "targetA": "06a",
+      "optionB": "忐忑求证：「陆总，我……可以吗？」",
+      "optionBSub": "直面重任略感局促，向陆总试探确认",
+      "targetB": "06b"
+    },
+    {
+      "id": "06a",
+      "title": "06A · 内心雀跃",
+      "summary": "特写心声：升职来得猝不及防",
+      "video": "videos/06a-1.mp4",
+      "duration": 5.038,
+      "branchTag": "3A",
+      "next": "07"
+    },
+    {
+      "id": "06b",
+      "title": "06B · 试探求证",
+      "summary": "轻声询问陆总自己能否胜任组长",
+      "video": "videos/06b-1.mp4",
+      "duration": 4.412,
+      "branchTag": "3B",
+      "next": "07"
+    },
+    {
+      "id": "07",
+      "title": "07 · 实力背书",
+      "summary": "陆总笃定认可能力，承诺项目奖金同步走流程",
+      "video": "videos/07-1.mp4",
+      "duration": 6.85,
+      "choiceIndex": 4,
+      "prompt": "得到陆总的实力认可与奖金承诺，接下来……",
+      "optionA": "郑重表态，承诺全力完成项目复盘",
+      "optionASub": "接住许星燃打趣，向陆总坚定立下军令状",
+      "targetA": "08a",
+      "optionB": "回望初心，感慨入职首日破局逆袭",
+      "optionBSub": "环顾并肩伙伴，在心底沉淀这场翻盘仗",
+      "targetB": "08b"
+    },
+    {
+      "id": "08a",
+      "title": "08A · 郑重承诺",
+      "summary": "许星燃打趣一步登天，夏橙橙郑重表态不负信任",
+      "video": "videos/08a-1.mp4",
+      "duration": 8.5,
+      "branchTag": "4A",
+      "next": "09"
+    },
+    {
+      "id": "08b",
+      "title": "08B · 风波回望",
+      "summary": "回想入职首日卷入风波到临危救场的心路历程",
+      "video": "videos/08b-1.mp4",
+      "duration": 3.738,
+      "branchTag": "4B",
+      "next": "09"
+    },
+    {
+      "id": "09",
+      "title": "09 · 新关卡开启",
+      "summary": "职场副本正式开启新关卡，达成「救场女王」成就",
+      "video": "videos/09-1.mp4",
+      "duration": 3.9,
+      "ending": true,
+      "endingId": "EP06_S09_RESCUE_QUEEN",
+      "endingTitle": "救场女王",
+      "endingAchievement": "直播救场！职位晋升！",
+      "endingSubtitle": "入职首日临危受命，凭专业试色力挽狂澜，正式执掌品牌部试色组。"
+    }
+  ]
+}
